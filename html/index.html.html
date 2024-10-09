@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Buddy</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            color: #3498db;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .container:hover {
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .expense-category, .financial-tips {
+            background-color: #fafafa;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .expense-category:hover, .financial-tips:hover {
+            background-color: #f1f1f1;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin: 15px 0;
+            font-size: 1rem;
+            text-align: left;
+        }
+
+        input[type="number"], button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus, button:hover {
+            border-color: #3498db;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
+        }
+
+        button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .total-section, .link-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .total-section p {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .badge {
+            font-size: 1.5rem;
+            margin-top: 10px;
+            color: #3498db;
+        }
+
+        .link-section a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .link-section a:hover {
+            background-color: #2980b9;
+        }
+
+        .financial-tips ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            font-size: 1rem;
+            text-align: left; /* Aligning the list to the left */
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1, h2, h3 {
+                font-size: 1.5rem;
+            }
+
+            .total-section p {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+    <script>
+        function calculateProfit() {
+            let profit = parseFloat(document.getElementById("profit").value) || 0;
+            let loss = parseFloat(document.getElementById("loss").value) || 0;
+            let total = profit - loss;
+            document.getElementById("result").innerHTML = "Total Money Left: ₹" + total;
+
+            let badge = "";
+            if (total <= 500) {
+                badge = "Bronze Badge";
+            } else if (total <= 1000) {
+                badge = "Silver Badge";
+            } else {
+                badge = "Gold Badge";
+            }
+            document.getElementById("badge").innerHTML = "You earned: " + badge;
+        }
+
+        function calculateExpenses() {
+            let expenses = {
+                laundry: document.querySelector('input[name="laundry"]:checked') ? parseInt(document.querySelector('input[name="laundry"]:checked').value) : 0,
+                cafes: document.querySelector('input[name="cafes"]:checked') ? parseInt(document.querySelector('input[name="cafes"]:checked').value) : 0,
+                travelling: document.querySelector('input[name="travelling"]:checked') ? parseInt(document.querySelector('input[name="travelling"]:checked').value) : 0,
+                dinner: document.querySelector('input[name="dinner"]:checked') ? parseInt(document.querySelector('input[name="dinner"]:checked').value) : 0,
+                tapri: document.querySelector('input[name="Tapri"]:checked') ? parseInt(document.querySelector('input[name="Tapri"]:checked').value) : 0,
+                shopping: document.querySelector('input[name="Shopping"]:checked') ? parseInt(document.querySelector('input[name="Shopping"]:checked').value) : 0
+            };
+
+            let totalSpent = expenses.laundry + expenses.cafes + expenses.travelling + expenses.dinner + expenses.tapri + expenses.shopping;
+            let highestSpentCategory = Object.keys(expenses).reduce((a, b) => expenses[a] > expenses[b] ? a : b);
+
+            let categories = {
+                laundry: "Laundry",
+                cafes: "Cafes in Flame",
+                travelling: "Travelling",
+                dinner: "Main City Dinner",
+                tapri: "Tapri",
+                shopping: "Shopping/Groceries"
+            };
+
+            document.getElementById("totalSpent").innerHTML = "Total Spent: ₹" + totalSpent + " (Most spent on " + categories[highestSpentCategory] + ")";
+        }
+    </script>
+</head>
+<body>
+    <h1>Budget Tracker App</h1>
+    <p style="text-align: center; margin-bottom: 30px;">Welcome to Budget Buddy! This website is designed to help you effectively track your expenses and savings, ensuring you stay on top of your financial goals. With easy-to-use tools and features, you can gain valuable insights into your spending habits, set budgets, and make informed financial decisions. Start your journey towards better financial management today and take control of your finances!</p>
+    <div class="container">
+        <h2>Calculate Your Monthly Savings</h2>
+        <label for="profit">Enter your monthly allowance:</label>
+        <input type="number" id="profit" placeholder="Enter your allowance" />
+        
+        <label for="loss">Enter your total expenditure:</label>
+        <input type="number" id="loss" placeholder="Enter your spending" />
+        
+        <button onclick="calculateProfit()">Calculate Savings</button>
+        
+        <p id="result" class="total-section">Total Money Left: ₹0</p>
+        <p id="badge" class="badge">You earned: </p>
+
+        <h2>Track Your Spending</h2>
+
+        <div class="expense-category">
+            <h3>Laundry</h3>
+            <label><input type="radio" name="laundry" value="0"> ₹0</label>
+            <label><input type="radio" name="laundry" value="500"> ₹500 - ₹1000</label>
+            <label><input type="radio" name="laundry" value="1000"> ₹1000 - ₹1500</label>
+        </div>
+
+        <div class="expense-category">
+            <h3>Cafes in Flame</h3>
+            <label><input type="radio" name="cafes" value="0"> ₹0</label>
+            <label><input type="radio" name="cafes" value="1000"> ₹500 - ₹1000</label>
+            <label><input type="radio" name="cafes" value="2000"> ₹1000 - ₹2000</label>
+            <label><input type="radio" name="cafes" value="3000"> ₹2000 - ₹3000</label>
+            <label><input type="radio" name="cafes" value="5000"> ₹3000 - ₹5000</label>
+        </div>
+
+        <div class="expense-category">
+            <h3>Travelling</h3>
+            <label><input type="radio" name="travelling" value="1000"> ₹0 - ₹1000</label>
+            <label><input type="radio" name="travelling" value="2000"> ₹1000 - ₹2000</label>
+        </div>
+
+        <div class="expense-category">
+            <h3>Main City Dinner</h3>
+            <label><input type="radio" name="dinner" value="0"> ₹0</label>
+            <label><input type="radio" name="dinner" value="1000"> ₹500 - ₹1000</label>
+            <label><input type="radio" name="dinner" value="2000"> ₹1000 - ₹2000</label>
+        </div>
+
+        <div class="expense-category">
+            <h3>Tapri</h3>
+            <label><input type="radio" name="Tapri" value="0"> ₹0</label>
+            <label><input type="radio" name="Tapri" value="500"> ₹500 - ₹1000</label>
+            <label><input type="radio" name="Tapri" value="1000"> ₹1000 - ₹1500</label>
+        </div>
+
+        <div class="expense-category">
+            <h3>Shopping/Groceries</h3>
+            <label><input type="radio" name="Shopping" value="0"> ₹0</label>
+            <label><input type="radio" name="Shopping" value="500"> ₹500 - ₹1000</label>
+            <label><input type="radio" name="Shopping" value="1000"> ₹1000 - ₹1500</label>
+        </div>
+
+        <button onclick="calculateExpenses()">Calculate Total Spent</button>
+        <p id="totalSpent" class="total-section">Total Spent: ₹0</p>
+    </div>
+
+    <div class="financial-tips container">
+        <h2>Financial Tips for Students</h2>
+        <ul>
+            <li>Track your expenses regularly to understand where your money goes.</li>
+            <li>Create a budget and stick to it to avoid overspending.</li>
+            <li>Look for student discounts and use them to save money.</li>
+            <li>Consider a side hustle or part-time job to increase your income.</li>
+            <li>Always set aside some money for emergencies.</li>
+        </ul>
+    </div>
+
+    <div class="link-section">
+            <h3>Want to know more about our team and what we've learned?</h3>
+            <a href="testing_2.html">Check out Our Learnings</a>
+        </div>
+
+</body>
+</html>
+
